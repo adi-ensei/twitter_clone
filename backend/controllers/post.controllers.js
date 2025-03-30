@@ -87,7 +87,12 @@ export const likeUnlikePost = async (req, res) => {
       // Toh Matlab unlike karana hai
       await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
       await User.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
-      res.status(200).json({ message: "Post Unliked SuccessFully" });
+
+      const updatedLikes = post.likes.filter(
+        (id) => id.toString() !== userId.toString()
+      );
+
+      res.status(200).json(updatedLikes);
     } else {
       // pehle se likes mai userId nahi hai matlab like karna hai
       post.likes.push(userId);
@@ -99,7 +104,10 @@ export const likeUnlikePost = async (req, res) => {
         type: "like",
       });
       await notification.save();
-      return res.status(200).json({ message: "Post liked Succeddfully" });
+
+      const updatedLikes = post.likes;
+
+      return res.status(200).json(updatedLikes);
     }
   } catch (error) {
     console.log(error, "Error in likeUnLikePost controllers");
