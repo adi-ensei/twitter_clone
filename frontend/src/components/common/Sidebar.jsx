@@ -13,10 +13,11 @@ const Sidebar = () => {
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch("api/auth/logout", {
+        const res = await fetch("/api/auth/logout", {
           method: "POST",
         });
         const data = await res.json();
+
         if (!res.ok) {
           throw new Error(data.error || "Something went wrong");
         }
@@ -31,7 +32,6 @@ const Sidebar = () => {
       toast.error("Logout failed");
     },
   });
-
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
   return (
